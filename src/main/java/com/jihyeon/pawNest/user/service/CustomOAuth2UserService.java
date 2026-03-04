@@ -34,7 +34,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String email = (String) kakaoAccount.get("email");
         String nickname = (String) profile.get("nickname");
 
-        // 이메일 파싱 로직: "gemini@kakao.com" -> "gemini"
+        // 이메일 파싱 로직: "user@kakao.com" -> "user"
         String parsedId = email.split("@")[0];
 
         User user = userRepository.findByEmail(email)
