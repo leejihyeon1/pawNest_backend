@@ -44,7 +44,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         // 테스트용으로 그냥 토큰 값을 브라우저 화면에 직접 찍어줄 수도 있습니다.
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write("로그인 성공! 발급된 토큰: " + token);
+           String jsonResponse = String.format(
+                   "{\"message\": \"로그인 성공\", \"token\": \"%s\", \"userId\": \"%s\"}",
+                   token, user.getUserId()
+           );
+
+           response.getWriter().write(jsonResponse);
        }catch (Exception e) {
            e.printStackTrace();
        }

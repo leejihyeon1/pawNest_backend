@@ -41,6 +41,8 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.1'
 	// jwt 관련 의존성 추가
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	//web socket 의존성 추가 (실시간댓글)
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

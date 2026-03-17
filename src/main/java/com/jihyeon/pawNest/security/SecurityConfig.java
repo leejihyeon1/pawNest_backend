@@ -35,10 +35,11 @@ public class SecurityConfig {
                                 "/login/**",
                                 "/oauth2/**",
                                 "/error",
-                                "/favicon.ico",
+                                "/ws-stomp/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/api/board/**"
+                                "/api/board/**",
+                                "/api/comment/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
