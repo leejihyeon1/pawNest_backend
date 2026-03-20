@@ -69,7 +69,6 @@ public class BoardController {
     @Operation(summary = "내 관심글 목록 조회(페이징/검색)",
             description = "관심글 목록 조회입니다.")
     @GetMapping("/myLikes")
-    /*  Todo : 내 댓글 목록 조회도 추가 필요 */
     public Page<BoardResponse> myLikes(
             @AuthenticationPrincipal String userId,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
