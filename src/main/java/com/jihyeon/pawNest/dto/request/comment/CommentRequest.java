@@ -15,6 +15,6 @@ public class CommentRequest {
     @Size(min = 1, max = 200, message = "댓글은 1자 이상 200자 이하로 작성해주세요.")
     private String content;   // 댓글 내용
 
-    @Schema(description = "작성자 아이디", example = "test")
+    @Schema(description = "작성자 아이디", example = "test",hidden = true)
     private String userId;    // 작성자 아이디 (로그인 정보에서 가져올 값)
 }

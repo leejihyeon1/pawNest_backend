@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Id
+    @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
@@ -36,10 +38,25 @@ public class Comment {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    private LocalDateTime deletedAt;
+
     @Builder
     public Comment(String content, Board board, String userId) {
         this.content = content;
         this.board = board;
         this.userId = userId;
+    }
+
+    //수정
+    public void update(String content){
+        this.content = content;
+    }
+
+    // 삭제
+    public void delete(){
+        this.deletedAt = LocalDateTime.now();
     }
 }

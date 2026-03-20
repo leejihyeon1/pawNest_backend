@@ -8,12 +8,12 @@ import com.jihyeon.pawNest.domain.user.User;
 import com.jihyeon.pawNest.dto.request.comment.CommentRequest;
 import com.jihyeon.pawNest.dto.response.comment.CommentResponse;
 import com.jihyeon.pawNest.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,6 +26,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final SimpMessagingTemplate messagingTemplate; // 실시간 전송용 도구
 
+    // 댓글 등록
     @Transactional
     public void saveAndSendComment(Long boardId, CommentRequest requestDto) {
         // 1. 게시글과 유저 존재 확인
@@ -57,14 +58,36 @@ public class CommentService {
 
     // 댓글 목록 조회
     public List<CommentResponse> commentList(Long boardId,String loginId){
-        List<Comment> list =  commentRepository.findByBoardBoardIdOrderByCreatedAtDesc(boardId);
+        List<Comment> list =  commentRepository.findByBoardBoardIdAndDeletedAtIsNullOrderByCreatedAtDesc(boardId);
 
         return list.stream().map(comment -> new CommentResponse(comment,loginId)).toList();
     }
 
     // 내가 쓴 글 조회
     public Page<CommentResponse> getMyComments(String userId, Pageable pageable) {
-        return commentRepository.findAllByUserId(userId, pageable)
+        return commentRepository.findAllByUserIdAndDeletedAtIsNull(userId, pageable)
                 .map(comment -> new CommentResponse(comment,userId));
     }
+
+    // 댓글 한 건 조회
+    public Comment getComment(Long commentId){
+        return commentRepository.findByCommentIdAndDeletedAtIsNull(commentId);
+    }
+
+    // 댓글 수정
+    @Transactional
+    public void updateComment(Long commentId,CommentRequest commentRequest){
+        Comment comment = this.getComment(commentId);
+        //댓글 내용 수정
+        comment.update(commentRequest.getContent());
+    }
+
+    // 삭제(soft delete)
+    @Transactional
+    public void deleteComment(Long commentId){
+        Comment comment = this.getComment(commentId);
+        comment.delete();
+    }
+
+
 }
