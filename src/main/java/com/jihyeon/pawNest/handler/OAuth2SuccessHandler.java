@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Map;
@@ -34,22 +35,22 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         // 1. JWT 토큰 생성 (parsedId를 담아서!) ✅
         String token = tokenProvider.createToken(user.getUserId(), user.getNickname());
-        // todo 2. 프론트엔드 리다이렉트 (쿼리 스트링으로 토큰 전달)
-        // 프론트엔드 주소가 http://localhost:3000 이라면:
-//        String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/oauth/callback")
-//                .queryParam("token", token)
-//                .build().toUriString();
-//
-//        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        // 프론트엔드 리다이렉트 (쿼리 스트링으로 토큰 전달)
+        String targetUrl = UriComponentsBuilder.fromUriString("https://paw-nest-green.vercel.app/")
+                .queryParam("token", token)
+                .queryParam("userId",user.getUserId())
+                .build().toUriString();
 
-        // 테스트용으로 그냥 토큰 값을 브라우저 화면에 직접 찍어줄 수도 있습니다.
-        response.setContentType("application/json;charset=UTF-8");
-           String jsonResponse = String.format(
-                   "{\"message\": \"로그인 성공\", \"token\": \"%s\", \"userId\": \"%s\"}",
-                   token, user.getUserId()
-           );
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
-           response.getWriter().write(jsonResponse);
+        // todo : 테스트용으로 그냥 토큰 값을 브라우저 화면에 직접 찍어줄 수도 있습니다.
+//        response.setContentType("application/json;charset=UTF-8");
+//           String jsonResponse = String.format(
+//                   "{\"message\": \"로그인 성공\", \"token\": \"%s\", \"userId\": \"%s\"}",
+//                   token, user.getUserId()
+//           );
+
+//           response.getWriter().write(jsonResponse);
        }catch (Exception e) {
            e.printStackTrace();
        }

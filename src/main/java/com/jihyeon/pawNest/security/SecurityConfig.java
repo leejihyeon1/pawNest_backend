@@ -63,7 +63,7 @@ public class SecurityConfig {
                 .logoutSuccessHandler((request, response, authentication) -> {
                     // 2. 우리 서버 로그아웃 처리가 성공하면 실행될 로직
                     String clientId = "ab28d0e606000f45ecb7687cb0738822"; // 카카오 REST API 키
-                    String logoutRedirectUri = "http://localhost:8080/api/board"; // 다시 돌아올 우리 주소
+                    String logoutRedirectUri = "https://paw-nest-green.vercel.app"; // 다시 돌아올 우리 주소
 
                     // 3. 카카오 로그아웃 URL 생성
                     String kakaoLogoutUrl = "https://kauth.kakao.com/oauth/logout?client_id="
