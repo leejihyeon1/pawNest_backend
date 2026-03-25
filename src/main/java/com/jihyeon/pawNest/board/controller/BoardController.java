@@ -7,6 +7,7 @@ import com.jihyeon.pawNest.dto.request.board.BoardUpdateRequest;
 import com.jihyeon.pawNest.dto.response.board.ApiResponse;
 import com.jihyeon.pawNest.dto.response.board.BoardResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,8 +49,8 @@ public class BoardController {
             description = "품종 검색 및 페이징 처리가 포함된 목록 조회입니다.")
     @GetMapping
     public Page<BoardResponse> list(
-            @RequestParam(required = false) String breed1, // 검색 조건 (필수 X)
-            @RequestParam(required = false) String color, // 검색 조건 (필수 X)
+            @RequestParam(required = false)@Schema(example = "강아지") String breed1, // 검색 조건 (필수 X)
+            @RequestParam(required = false)@Schema(example = "갈색") String color, // 검색 조건 (필수 X)
             @RequestParam(required = false) String searchText, // 검색 조건 (필수 X)
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
