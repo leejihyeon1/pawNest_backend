@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "실시간 WebSocket(STOMP) 명세",
-        description = "댓글 목록 조회, 내가 쓴 댓글 조회, 댓글 수정/삭제 외 나머지는 stomp 호출 가이드 입니다.")
+@Tag(name = "comment + webSocket 명세",
+        description = "/api로 시작하지 않는 주소는 stomp 호출 가이드")
 @RestController
 @RequiredArgsConstructor
 public class CommentHttpController {

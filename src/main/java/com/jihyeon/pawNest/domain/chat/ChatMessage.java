@@ -21,7 +21,7 @@ public class ChatMessage {
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom; // 어떤 방의 메시지인지
 
-    private Long senderId; // 보낸 사람 ID
+    private String senderId; // 보낸 사람 ID
 
     @Column(columnDefinition = "TEXT")
     private String message; // 메시지 내용
@@ -29,7 +29,7 @@ public class ChatMessage {
     private LocalDateTime createdAt; // 전송 시간
 
     @Builder
-    public ChatMessage(ChatRoom chatRoom, Long senderId, String message) {
+    public ChatMessage(ChatRoom chatRoom, String senderId, String message) {
         this.chatRoom = chatRoom;
         this.senderId = senderId;
         this.message = message;
