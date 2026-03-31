@@ -23,8 +23,11 @@ public class ChatRoomService {
 
     public ChatRoomResponse createChatRoom(ChatRoomRequest request,String userId) {
         // 1. 이미 존재하는 방인지 확인
+        Board board = boardRepository.findById(request.getBoardId())
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
         Optional<ChatRoom> existingRoom = chatRoomRepository.findByBoardBoardIdAndSenderIdAndReceiverId(
-                request.getBoardId(), userId, request.getReceiverId());
+                request.getBoardId(), userId, board.getWriterId());
 
         // 2. 존재한다면 해당 방 정보를 바로 반환
         if (existingRoom.isPresent()) {
@@ -32,15 +35,11 @@ public class ChatRoomService {
         }
 
         // 3. 존재하지 않는다면 새로 생성
-        Board board = boardRepository.findById(request.getBoardId())
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
-
         ChatRoom newRoom = ChatRoom.builder()
                 .board(board)
                 .senderId(userId)
-                .receiverId(request.getReceiverId())
+                .receiverId(board.getWriterId())
                 .build();
-
         chatRoomRepository.save(newRoom);
         return new ChatRoomResponse(newRoom,null);
     }

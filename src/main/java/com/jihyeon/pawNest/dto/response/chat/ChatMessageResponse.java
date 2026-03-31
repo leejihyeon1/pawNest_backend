@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,10 +17,10 @@ import org.springframework.data.annotation.CreatedDate;
 public class ChatMessageResponse {
     private Long messageId;
     private String senderId;
+    private String message;
     @CreatedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private String message;
-    private String createdAt;
+    private LocalDateTime createdAt;
     private boolean isMine;   // 내가 보낸 메시지인지 여부
 
     // Entity -> DTO 변환 메서드
@@ -27,7 +29,7 @@ public class ChatMessageResponse {
                 .messageId(chatMessage.getMessageId())
                 .senderId(chatMessage.getSenderId())
                 .message(chatMessage.getMessage())
-                .createdAt(chatMessage.getCreatedAt().toString()) // 프론트에서 가공하도록 표준값 전송
+                .createdAt(chatMessage.getCreatedAt())
                 .isMine(chatMessage.getSenderId().equals(userId))
                 .build();
     }
