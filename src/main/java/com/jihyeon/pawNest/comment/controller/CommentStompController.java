@@ -11,6 +11,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -22,12 +24,14 @@ public class CommentStompController {
      //접두사 /app 필요!!!
     @MessageMapping("/comment/{boardId}")
     // 일반적인 @RestController :  @requestBody , STOMP(webSocket)환경 : @payload
-    public void sendComment(@DestinationVariable Long boardId, @Payload CommentRequest request) {
+    public void sendComment(@DestinationVariable Long boardId,
+                            @Payload CommentRequest request,
+                            Principal principal) {
 
         if(request.getContent().length() > 200){
             throw  new RuntimeException("댓글은 200자 이내로 입력해주세요.");
         }
-        commentService.saveAndSendComment(boardId,request);
+        commentService.saveAndSendComment(boardId,request,principal.getName());
     }
 
     @MessageExceptionHandler(RuntimeException.class) //해당 컨트롤러 클래스 안에서 발생하는 에러만 잡음

@@ -11,6 +11,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
+
 @Controller
 @RequiredArgsConstructor
 public class ChatStompController {
@@ -20,14 +22,14 @@ public class ChatStompController {
 
     // 채팅 전송
     @MessageMapping("/chat/message")
-    public void sendMessage(@Payload ChatMessageRequest message) {
+    public void sendMessage(@Payload ChatMessageRequest message, Principal principal) {
         // 1. DB에 저장하기 (방 존재 여부 확인 후)
         ChatRoom room = chatRoomRepository.findById(message.getRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("방을 찾을 수 없습니다."));
 
         ChatMessage chat = ChatMessage.builder()
                 .chatRoom(room)
-                .senderId(message.getUserId())
+                .senderId(principal.getName())
                 .message(message.getMessage())
                 .build();
 

@@ -28,11 +28,11 @@ public class CommentService {
 
     // 댓글 등록
     @Transactional
-    public void saveAndSendComment(Long boardId, CommentRequest requestDto) {
+    public void saveAndSendComment(Long boardId, CommentRequest requestDto,String userId) {
         // 1. 게시글과 유저 존재 확인
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
-        User user = userRepository.findByUserId(requestDto.getUserId())
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
         // 2. 댓글 엔티티 생성 및 저장

@@ -86,11 +86,12 @@ public class CommentHttpController {
 
     @Operation(
             summary = "댓글 전송 [SEND]",
-            description = "주소: **/app/comment/{boardId}** <br> " +
+            description = "웹소켓 연결 주소: **/ws** <br> " +
+                    "댓글 전송 주소: **/app/comment/{boardId}** <br> "+
                     "설명: 특정 게시글에 댓글을 전송합니다. <br> " +
                     "**제약사항**: 댓글 내용은 **1자 이상 200자 이하**여야 합니다. <br> " +
-                    "**주의**: 1 . WebSocket 연결 후 STOMP SEND 프레임을 사용하세요. <br>" +
-                    "2 . 댓글 전송 전에 에러 채널을 구독하세요. <br>" +
+                    "**주의**: 1 . WebSocket 연결 후 STOMP SEND 프레임을 사용. <br>" +
+                    "2 . 댓글 전송 전에 에러 채널을 구독. <br>" +
                     "**connect 시 필요** : 연결 헤더 - Authorization : Bearer {token}"
     )
     @PostMapping("/app/comment/{boardId}")

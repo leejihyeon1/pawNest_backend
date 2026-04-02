@@ -49,7 +49,7 @@ public class AiService {
                     return "분석 실패: " + res.getError().getMessage();
                 }
 
-                // 분석 결과 리스트 전체 출력해보기 (디버깅용)
+                // todo : 분석 결과 리스트 전체 출력해보기 (디버깅용) - 삭제 필요
                 res.getLabelAnnotationsList().forEach(label ->
                         System.out.println("라벨: " + label.getDescription() + " / 점수: " + label.getScore())
                 );

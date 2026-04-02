@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class ChatMessageRequest {
     private Long roomId;    // 어떤 방인지
     private String message; // 메시지 내용
-    private String userId; //전송자 아이디
 }

@@ -36,14 +36,12 @@ public class SecurityConfig {
                                 "/uploads/**",
                                 "/oauth2/**",
                                 "/error",
-                                "/ws-stomp/**",
+                                "/ws/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/api/board/**",
                                 "/api/comment/**",
                                 "/api/comments/**"
-
-
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

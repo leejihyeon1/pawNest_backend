@@ -2,7 +2,9 @@ package com.jihyeon.pawNest.ai.controller;
 
 import com.jihyeon.pawNest.ai.service.AiService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/ai")
+@Tag(name = "AI Search", description = "AI 품종 찾기")
 @RequiredArgsConstructor
 public class AiController {
 
@@ -22,7 +25,7 @@ public class AiController {
     /**
      * 이미지 파일을 받아 강아지 품종을 분석합니다.
      */
-    @PostMapping("/detect-breed")
+    @PostMapping(value = "/detect-breed", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "이미지로 ai 품종 찾기")
     public ResponseEntity<String> detectBreed(@RequestParam("file") MultipartFile file) {
         // 1. 파일이 비어있는지 체크
