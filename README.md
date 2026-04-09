@@ -37,7 +37,7 @@
 # 🏗 트러블 슈팅
 #### 1. WebSocket 인증 정보 유실
 - **Issue** : Spring Security의 OncePerRequestFilter는 HTTP 요청에만 반응하여, WebSocket 연결 시 @AuthenticationPrincipal에 인증 정보 대신 @Payload 데이터가 담기는 현상 발생
-- **Solution** :  ChannerlInterceptor를 구현하여 웹소켓 CONNECT 프레임에서 JWT를 검증하고, MessageHeaderAccessor를 통해 세션에 유지 정보를 수동 주입하여 해결
+- **Solution** :  ChannelInterceptor를 구현하여 웹소켓 CONNECT 프레임에서 JWT를 검증하고, MessageHeaderAccessor를 통해 세션에 유지 정보를 수동 주입하여 해결
 
 #### 2. AI 데이터 필터
 - **Issue** : Vision API 결과에 'Dog','Pet'등 너무 일반적이거나 포괄적인 범위의 단어들이 출력 되는 문제
@@ -77,7 +77,9 @@ src/main/java/com/jihyeon/pawNest
 │   ├── chat
 │   ├── comment
 │   ├── user
-├─  dto //4. reqeust/response dto 분리
+├─  dto //4. dto 분리
+│   ├── request
+│   ├── response
 ├─ handler //5. 로그인 성공 처리 핸들러 및 웹소켓 전용 핸들러
 │   ├── OAuth2SuccessHandler.java
 │   ├── StompHandler.java         // CONNECT 시점에 토큰 검증 및 Principal 주입
