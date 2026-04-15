@@ -2,6 +2,7 @@ package com.jihyeon.pawNest.security;
 
 import com.jihyeon.pawNest.handler.OAuth2SuccessHandler;
 import com.jihyeon.pawNest.user.service.CustomOAuth2UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,7 +77,15 @@ public class SecurityConfig {
                 })
                 .invalidateHttpSession(true) // 세션 무효화
                 .deleteCookies("JSESSIONID") // 쿠키 삭제
-        );
+        )
+                .exceptionHandling(handler -> handler
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            // 토큰 만료로 인한 인증 실패 시 401 에러를 응답 (프론트에서 로그인페이지로 리다이렉트)
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); //401(unauthorized error)
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().write("{\"message\": \"로그인 세션이 만료되었습니다. 다시 로그인해주세요.\"}");
+                        })
+                );
         return http.build();
     }
 

@@ -94,7 +94,7 @@ public class CommentHttpController {
                     "2 . 댓글 전송 전에 에러 채널을 구독. <br>" +
                     "**connect 시 필요** : 연결 헤더 - Authorization : Bearer {token}"
     )
-    @PostMapping("/app/comment/{boardId}")
+    @GetMapping("/app/comment/{boardId}")
     public void sendComment(
             @PathVariable Long boardId,
             @RequestBody @Valid CommentRequest request) {
