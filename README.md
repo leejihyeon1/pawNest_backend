@@ -18,7 +18,7 @@
 
 # 🛠 기술 스택
 **Backend**
-- JAVA 17
+- JAVA 21
 - Spring boot 3.x
 - Spring Security
 - Spring Data JPA
