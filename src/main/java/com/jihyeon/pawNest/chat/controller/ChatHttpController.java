@@ -25,7 +25,7 @@ public class ChatHttpController {
     private final ChatService chatService;
 
     // 1. 채팅방 생성 (게시글에서 '채팅하기' 클릭 시)
-    @PostMapping("/api/caht/room")
+    @PostMapping("/api/chat/room")
     @Operation(summary = "채팅방 생성",description ="기존 채팅방이 있으면 기존 채팅방id, 없으면 새로운 채팅방 반환" )
     public ResponseEntity<ChatRoomResponse> createRoom(@RequestBody ChatRoomRequest request,
                                                        @AuthenticationPrincipal String userId) {
