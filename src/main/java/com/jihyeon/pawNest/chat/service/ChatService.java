@@ -25,7 +25,7 @@ public class ChatService {
 
         List<ChatMessage> messages = chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(room);
 
-        return messages.stream()
+        return  messages.stream()
                 .map(message -> ChatMessageResponse.of(message, userId))
                 .toList();
     }

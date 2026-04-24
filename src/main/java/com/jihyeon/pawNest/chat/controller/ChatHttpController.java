@@ -4,12 +4,12 @@ import com.jihyeon.pawNest.chat.service.ChatRoomService;
 import com.jihyeon.pawNest.chat.service.ChatService;
 import com.jihyeon.pawNest.dto.request.chat.ChatMessageRequest;
 import com.jihyeon.pawNest.dto.request.chat.ChatRoomRequest;
-import com.jihyeon.pawNest.dto.response.chat.ChatMessageResponse;
 import com.jihyeon.pawNest.dto.response.chat.ChatRoomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +27,14 @@ public class ChatHttpController {
     // 1. 채팅방 생성 (게시글에서 '채팅하기' 클릭 시)
     @PostMapping("/api/chat/room")
     @Operation(summary = "채팅방 생성",description ="기존 채팅방이 있으면 기존 채팅방id, 없으면 새로운 채팅방 반환" )
-    public ResponseEntity<ChatRoomResponse> createRoom(@RequestBody ChatRoomRequest request,
+    public ResponseEntity<?> createRoom(@RequestBody ChatRoomRequest request,
                                                        @AuthenticationPrincipal String userId) {
-        return ResponseEntity.ok(chatRoomService.createChatRoom(request,userId));
+        try {
+            chatRoomService.createChatRoom(request,userId);
+            return ResponseEntity.ok(chatRoomService.createChatRoom(request,userId));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // 2. 내 채팅방 리스트 조회 (로그인한 유저의 전체 채팅 목록)
@@ -42,12 +47,18 @@ public class ChatHttpController {
     // 3. 채팅방 지난 메세지들 목록 조회
     @GetMapping("/api/chat/room/{roomId}/messages")
     @Operation(summary = "지난 메세지들 조회 (채팅방 입장 시)")
-    public ResponseEntity<List<ChatMessageResponse>> getMessages(
+    public ResponseEntity<?> getMessages(
             @PathVariable Long roomId,
             @AuthenticationPrincipal String userId
     ) {
-        // 현재 로그인한 유저의 ID를 넘겨서 isMine을 판별하게 함
-        return ResponseEntity.ok(chatService.getChatMessages(roomId,userId));
+        try {
+            chatService.getChatMessages(roomId,userId);
+            // 현재 로그인한 유저의 ID를 넘겨서 isMine을 판별하게 함
+            return ResponseEntity.ok(chatService.getChatMessages(roomId,userId));
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @Operation(

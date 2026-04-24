@@ -84,7 +84,7 @@ public class Board {
     // 필드들을 조합하여 타이틀을 생성하는 메서드
     public void generateTitle() {
         // 예: [말티즈] 2살_하얀색
-        this.title = String.format("[%s] %s_%s",
+        this.title = String.format("[%s] %s살_%s",
                 this.breed2,
                 this.age,
                 this.color);
