@@ -30,7 +30,7 @@ public class ChatStompController {
         ChatMessage chat = ChatMessage.builder()
                 .chatRoom(room)
                 .senderId(principal.getName())
-                .message(message.getMessage())
+                .message(message.getContent())
                 .build();
 
         chatMessageRepository.save(chat);

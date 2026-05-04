@@ -7,6 +7,7 @@ import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
 import com.google.cloud.vision.v1.*;
 import com.google.protobuf.ByteString;
+import com.jihyeon.pawNest.dto.response.ai.BreedResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AiService {
 
-    public String detectDogBreed(MultipartFile file) throws IOException {
+    public List<BreedResponse> detectDogBreed(MultipartFile file) throws IOException {
         // 1. JSON 키 파일 로드 (resources 폴더의 파일명과 일치해야 함)
         GoogleCredentials credentials = GoogleCredentials.fromStream(
                 new ClassPathResource("google-key.json").getInputStream()
@@ -45,30 +46,28 @@ public class AiService {
         // 5. API 호출 (설정된 settings를 반드시 인자로 전달!)
         try (ImageAnnotatorClient client = ImageAnnotatorClient.create(settings)) {
             BatchAnnotateImagesResponse response = client.batchAnnotateImages(List.of(request));
-            List<AnnotateImageResponse> responses = response.getResponsesList();
-
-            for (AnnotateImageResponse res : responses) {
+            AnnotateImageResponse res = response.getResponsesList().get(0); // 첫 번째 결과 바로 가져오기
                 if (res.hasError()) {
                     log.error("Google Vision API Error: {}", res.getError().getMessage());
-                    return "분석 실패: " + res.getError().getMessage();
                 }
 
                 // 결과물 중 품종 키워드 추출
-                String finalResult = res.getLabelAnnotationsList().stream()
+                List<BreedResponse> finalResult = res.getLabelAnnotationsList().stream()
                         .filter(label -> isDogBreed(label.getDescription()))
                         .limit(3)
                         .map(label -> {
                             String koreanName = translateToKorean(label.getDescription()); // 한글 번역 수행
-                            int confidence = Math.round(label.getScore() * 100);
-                            return String.format("%s (%d%%)", koreanName, confidence);
-                        })
-                        .collect(Collectors.joining(", "));
+                            double confidence = Math.round(label.getScore() * 100);
+                            return new BreedResponse(koreanName,confidence);
 
-                return finalResult.isEmpty()? "품종을 특정할 수 없습니다. 다른 사진으로 재시도 바랍니다.": finalResult;
+                        })
+                        .collect(Collectors.toList());
+
+                if(finalResult.isEmpty()) throw new IllegalArgumentException("품종을 특정할 수 없습니다. 다른 사진으로 재시도 바랍니다.");
+
+                return finalResult;
             }
         }
-        return "분석 결과가 없습니다.";
-    }
 
     private boolean isDogBreed(String label) {
         // AI가 분석한 결과 중 너무 포괄적이거나 상태를 나타내는 단어들
