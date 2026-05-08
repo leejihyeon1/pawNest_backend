@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -31,7 +32,7 @@ public class ChatRoomService {
 
         // 2. 존재한다면 해당 방 정보를 바로 반환
         if (existingRoom.isPresent()) {
-            return new ChatRoomResponse(existingRoom.get(),null);
+            return new ChatRoomResponse(existingRoom.get(),null,null);
         }
 
         // 3. 존재하지 않는다면 새로 생성
@@ -41,7 +42,7 @@ public class ChatRoomService {
                 .receiverId(board.getWriterId())
                 .build();
         chatRoomRepository.save(newRoom);
-        return new ChatRoomResponse(newRoom,null);
+        return new ChatRoomResponse(newRoom,null,null);
     }
 
     public List<ChatRoomResponse> findAllRoomsByUserId(String userId) {
@@ -50,11 +51,12 @@ public class ChatRoomService {
         //각 방 별 마지막 채팅 메세지 세팅
         return chatRooms.stream().map(chatRoom -> {
             //해당 방의 가장 최신 메세지 조회
-            Optional<ChatMessage> lastChat = chatMessageRepository.findTopByChatRoomOrderByCreatedAtDesc(chatRoom);
-
             //메세지가 있으면 내용 전달, 없으면 기본 문구 전달
+            Optional<ChatMessage> lastChat = chatMessageRepository.findTopByChatRoomOrderByCreatedAtDesc(chatRoom);
             String lastMessage = lastChat.map(ChatMessage::getMessage).orElse("대화 시작 전입니다.");
-            return new ChatRoomResponse(chatRoom,lastMessage);
+
+            String displayId = Objects.equals(chatRoom.getReceiverId(), userId) ? chatRoom.getSenderId():chatRoom.getReceiverId();
+            return new ChatRoomResponse(chatRoom,lastMessage,displayId);
         }).toList();
     }
 

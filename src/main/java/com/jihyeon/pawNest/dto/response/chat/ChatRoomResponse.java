@@ -22,11 +22,15 @@ public class ChatRoomResponse {
     // 생성 시간 (방 목록 정렬 등에 활용)
     private LocalDateTime createdAt;
 
-    public ChatRoomResponse(ChatRoom chatRoom,String lastMessage) {
+    // 화면에 출력 될 아이디 값
+    private String displayId;
+
+    public ChatRoomResponse(ChatRoom chatRoom,String lastMessage,String displayId) {
         this.roomId = chatRoom.getRoomId();
         this.boardId = chatRoom.getBoard().getBoardId();
         this.senderId = chatRoom.getSenderId();
         this.receiverId = chatRoom.getReceiverId();
         this.lastMessage = lastMessage;
+        this.displayId = displayId;
     }
 }

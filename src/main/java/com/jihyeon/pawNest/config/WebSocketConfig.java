@@ -30,6 +30,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("*") // 모든 도메인 허용 (테스트용)
                 .withSockJS(); // SockJS 지원 (브라우저 호환성) websocket 추가 필요
+
+        // 2. 모바일/순수 웹소켓 전용 엔드포인트 추가 (핵심!)
+        // .withSockJS()를 붙이지 않으면 순수 WebSocket(wss://)으로 접속 가능합니다.
+                registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*");
     }
 
     @Override
