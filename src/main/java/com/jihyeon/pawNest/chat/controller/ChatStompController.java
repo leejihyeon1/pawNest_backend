@@ -23,6 +23,7 @@ public class ChatStompController {
     // 채팅 전송
     @MessageMapping("/chat/message")
     public void sendMessage(@Payload ChatMessageRequest message, Principal principal) {
+
         // 1. DB에 저장하기 (방 존재 여부 확인 후)
         ChatRoom room = chatRoomRepository.findById(message.getRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("방을 찾을 수 없습니다."));

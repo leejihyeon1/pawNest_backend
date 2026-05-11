@@ -2,13 +2,18 @@ package com.jihyeon.pawNest.dto.request.chat;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
 public class ChatMessageRequest {
-    private Long roomId;    // 어떤 방인지
-    private String content; // 메시지 내용
+    private Long commentId;
+    private Long roomId;
+    private String content;
+    private String senderId;
+    private LocalDateTime createdAt;
 
 }
